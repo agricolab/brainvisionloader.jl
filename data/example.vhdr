@@ -1,0 +1,170 @@
+﻿Brain Vision Data Exchange Header File Version 1.0
+; Data created by the Vision Recorder
+
+[Common Infos]
+Codepage=UTF-8
+DataFile=example.eeg
+MarkerFile=example.vmrk
+DataFormat=BINARY
+; Data orientation: MULTIPLEXED=ch1,pt1, ch2,pt1 ...
+DataOrientation=MULTIPLEXED
+NumberOfChannels=39
+; Sampling interval in microseconds
+SamplingInterval=1000
+
+[Binary Infos]
+BinaryFormat=INT_16
+
+[Channel Infos]
+; Each entry: Ch<Channel number>=<Name>,<Reference channel name>,
+; <Resolution in "Unit">,<Unit>, Future extensions..
+; Fields are delimited by commas, some fields might be omitted (empty).
+; Commas in channel names are coded as "\1".
+Ch1=Fp1,,0.1,µV
+Ch2=Fp2,,0.1,µV
+Ch3=F3,,0.1,µV
+Ch4=Fz,,0.1,µV
+Ch5=F4,,0.1,µV
+Ch6=FT7,,0.1,µV
+Ch7=FC5,,0.1,µV
+Ch8=FC3,,0.1,µV
+Ch9=FC1,,0.1,µV
+Ch10=FC2,,0.1,µV
+Ch11=FC4,,0.1,µV
+Ch12=FC6,,0.1,µV
+Ch13=FT8,,0.1,µV
+Ch14=C5,,0.1,µV
+Ch15=C3,,0.1,µV
+Ch16=C1,,0.1,µV
+Ch17=Cz,,0.1,µV
+Ch18=C2,,0.1,µV
+Ch19=C4,,0.1,µV
+Ch20=C6,,0.1,µV
+Ch21=TP7,,0.1,µV
+Ch22=CP5,,0.1,µV
+Ch23=CP3,,0.1,µV
+Ch24=CP1,,0.1,µV
+Ch25=CPz,,0.1,µV
+Ch26=CP2,,0.1,µV
+Ch27=CP4,,0.1,µV
+Ch28=CP6,,0.1,µV
+Ch29=TP8,,0.1,µV
+Ch30=P3,,0.1,µV
+Ch31=P4,,0.1,µV
+Ch32=POz,,0.1,µV
+Ch33=APB,,0.1,µV
+Ch34=FDC,,0.1,µV
+Ch35=ECR,,0.1,µV
+Ch36=EDC,,0.1,µV
+Ch37=ECU,,0.1,µV
+Ch38=FDCre,,0.1,µV
+Ch39=EDCre,,0.1,µV
+
+[Comment]
+
+A m p l i f i e r  S e t u p
+============================
+Number of channels: 39
+Sampling Rate [Hz]: 1000
+Sampling Interval [µS]: 1000
+
+Channels
+--------
+#     Name      Phys. Chn.    Resolution / Unit   Low Cutoff [s]   High Cutoff [Hz]   Notch [Hz]    Series Res. [kOhm] Gradient         Offset
+1     Fp1         1                0.1 µV             10             1000              Off                0                 
+2     Fp2         2                0.1 µV             10             1000              Off                0                 
+3     F3          3                0.1 µV             10             1000              Off                0                 
+4     Fz          4                0.1 µV             10             1000              Off                0                 
+5     F4          5                0.1 µV             10             1000              Off                0                 
+6     FT7         6                0.1 µV             10             1000              Off                0                 
+7     FC5         7                0.1 µV             10             1000              Off                0                 
+8     FC3         8                0.1 µV             10             1000              Off                0                 
+9     FC1         9                0.1 µV             10             1000              Off                0                 
+10    FC2         10               0.1 µV             10             1000              Off                0                 
+11    FC4         11               0.1 µV             10             1000              Off                0                 
+12    FC6         12               0.1 µV             10             1000              Off                0                 
+13    FT8         13               0.1 µV             10             1000              Off                0                 
+14    C5          14               0.1 µV             10             1000              Off                0                 
+15    C3          15               0.1 µV             10             1000              Off                0                 
+16    C1          16               0.1 µV             10             1000              Off                0                 
+17    Cz          17               0.1 µV             10             1000              Off                0                 
+18    C2          18               0.1 µV             10             1000              Off                0                 
+19    C4          19               0.1 µV             10             1000              Off                0                 
+20    C6          20               0.1 µV             10             1000              Off                0                 
+21    TP7         21               0.1 µV             10             1000              Off                0                 
+22    CP5         22               0.1 µV             10             1000              Off                0                 
+23    CP3         23               0.1 µV             10             1000              Off                0                 
+24    CP1         24               0.1 µV             10             1000              Off                0                 
+25    CPz         25               0.1 µV             10             1000              Off                0                 
+26    CP2         26               0.1 µV             10             1000              Off                0                 
+27    CP4         27               0.1 µV             10             1000              Off                0                 
+28    CP6         28               0.1 µV             10             1000              Off                0                 
+29    TP8         29               0.1 µV             10             1000              Off                0                 
+30    P3          30               0.1 µV             10             1000              Off                0                 
+31    P4          31               0.1 µV             10             1000              Off                0                 
+32    POz         32               0.1 µV             10             1000              Off                0                 
+33    APB         33               0.1 µV             10             1000              Off                0                 
+34    FDC         34               0.1 µV             10             1000              Off                0                 
+35    ECR         35               0.1 µV             10             1000              Off                0                 
+36    EDC         36               0.1 µV             10             1000              Off                0                 
+37    ECU         37               0.1 µV             10             1000              Off                0                 
+38    FDCre       38               0.1 µV             10             1000              Off                0                 
+39    EDCre       39               0.1 µV             10             1000              Off                0                 
+
+S o f t w a r e  F i l t e r s
+==============================
+Disabled
+
+
+Data Electrodes Selected Impedance Measurement Range: 0 - 50 kOhm
+Ground Electrode Selected Impedance Measurement Range: 0 - 20 kOhm
+Reference Electrode Selected Impedance Measurement Range: 0 - 20 kOhm
+Impedance [kOhm] at 16:56:01 :
+Fp1:          9
+Fp2:      Out of Range!
+F3:          21
+Fz:          17
+F4:           1
+FT7:         23
+FC5:         19
+FC3:         18
+FC1:         11
+FC2:          7
+FC4:          9
+FC6:          9
+FT8:         15
+C5:          17
+C3:          14
+C1:          11
+Cz:          17
+C2:          16
+C4:           3
+C6:           4
+TP7:         28
+CP5:         20
+CP3:         17
+CP1:         10
+CPz:          8
+CP2:         29
+CP4:          5
+CP6:         15
+TP8:          7
+P3:          21
+P4:           4
+POz:         12
+APB+:     Out of Range!
+APB-:         8
+FDC+:        17
+FDC-:        31
+ECR+:        14
+ECR-:         4
+EDC+:         3
+EDC-:        12
+ECU+:        32
+ECU-:        58
+FDCre+:       7
+FDCre-:       4
+EDCre+:      17
+EDCre-:       3
+Ref:          7
+Gnd:          4
