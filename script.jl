@@ -1,16 +1,16 @@
-#
-workspace()
+# workspace()
 using Plots
 plotlyjs()
-# unicodeplots()
 include("readBrainVision.jl")
 
 filename = "./data/example"
 EEG = NI.loadFile(filename)
 
 ## --------
-y = EEG.data[25,1:10*EEG.SamplingRate]
-x = 1:length(y)
+toi     = EEG.Markers[2,2]-EEG.SamplingRate:EEG.Markers[2,2]+EEG.SamplingRate;
+y       = EEG.data[25,toi]
+x       = [1:length(y)]-EEG.SamplingRate
+xtick   = -EEG.SamplingRate:(EEG.SamplingRate/4):EEG.SamplingRate
 
 plot(x, y,
     linewidth=2,
@@ -20,6 +20,7 @@ plot(x, y,
     xlabel = "Time in ms",
     ylabel = "Amplitude in μV",
     size = (1024,480),
+    xticks = xtick,
     );
-
+gui()
 savefig("./data/example.png")

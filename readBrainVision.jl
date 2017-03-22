@@ -3,28 +3,59 @@ module NI
 type dataset
     data::Array{Float64}
     labels::Array{String}
+    Markers
     SamplingRate::Int32
 end
 
-
 function loadFile(filename::String)
-    DataInfo, ChanInfo = readHDR(filename)
-    f           = open(string(filename,".eeg"))
-    FileSize    = position(seekend(f))
-    FrameNumber = Int64(FileSize/( get(DataInfo,"ByteLength",2) * get(DataInfo,"ChannelNumber",32)))
-    FileDim     = (get(DataInfo,"ChannelNumber",32),FrameNumber)
-    seekstart(f)
-    trial       = float(read(f, Int16, FileDim[1],FileDim[2]))
-    close(f)
-    trial       = trial.*repmat(ChanInfo[2,:],1,size(trial,2))
-
-    EEG = dataset(trial,ChanInfo[1,:],get(DataInfo,"SamplingRate",NaN));
-    # return EEG, DataInfo, ChanInfo
+    DataInfo, ChanInfo  = readHDR(filename)
+    trial               = readEEG(filename,DataInfo,ChanInfo)
+    Markers             = readMRK(filename)
+    EEG                 = dataset(trial,ChanInfo[1,:],Markers,get(DataInfo,"SamplingRate",NaN));
     return EEG
 end
 
+function readEEG(filename::String,DataInfo,ChanInfo)
+    open(string(filename,".eeg")) do f
+        FileSize    = position(seekend(f))
+        FrameNumber = Int64(FileSize/( get(DataInfo,"ByteLength",2) * get(DataInfo,"ChannelNumber",32)))
+        FileDim     = (get(DataInfo,"ChannelNumber",32),FrameNumber)
+        seekstart(f)
+        trial       = float(read(f, Int16, FileDim[1],FileDim[2]))
+    end
+    trial       = trial.*repmat(ChanInfo[2,:],1,size(trial,2))
+    return trial
+end
+
+function readMRK(filename::String)
+    doCollect   = false
+    MarkerInfo  = hcat(Array{String}(0,1),Array{Int64}(0,1))
+    open(string(filename,".vmrk")) do f
+        while !eof(f)
+            x = readline(f)
+            # Read Channel-Specific Info
+            if contains(x[1:2],"\r\n"); doCollect = false; end
+            if doCollect
+                MarkerInfo  = vcat(MarkerInfo,getMarkerSegment(x))
+            end
+            if contains(x,"; Commas in type or description text are coded")
+                doCollect = true
+            end
+        end
+    end
+    return MarkerInfo
+end
+
+function getMarkerSegment(x)
+    k1          = search(x,',')
+    k2          = search(x,',',k1+1)
+    k3          = search(x,',',k2+1)
+    MarkerCode  = x[k1+1:k2-1]
+    MarkerSeg   = parse(Int64,x[k2+1:k3-1])
+    return Mrk  = hcat(MarkerCode,MarkerSeg)
+end
+
 function readHDR(filename::String)
-    filename      = string(filename,".vhdr")
     Fs            = NaN;
     dataFormat    = "";
     bitFormat     = NaN;
@@ -34,7 +65,7 @@ function readHDR(filename::String)
     ChanInfo      = [];
     DataInfo      = [];
     doCollect     = false;
-    open(filename) do f
+    open(string(filename,".vhdr")) do f
         while !eof(f)
             x = readline(f)
 
