@@ -1,18 +1,29 @@
-function readEEG(filename)
+module NI
+
+type dataset
+    data::Array{Float64}
+    labels::Array{String}
+    SamplingRate::Int32
+end
+
+
+function loadFile(filename::String)
     DataInfo, ChanInfo = readHDR(filename)
     f           = open(string(filename,".eeg"))
     FileSize    = position(seekend(f))
     FrameNumber = Int64(FileSize/( get(DataInfo,"ByteLength",2) * get(DataInfo,"ChannelNumber",32)))
     FileDim     = (get(DataInfo,"ChannelNumber",32),FrameNumber)
     seekstart(f)
-    EEG         = float(read(f, Int16, FileDim[1],FileDim[2]))
+    trial       = float(read(f, Int16, FileDim[1],FileDim[2]))
     close(f)
-    EEG         = EEG.*repmat(ChanInfo[2,:],1,size(EEG,2))
+    trial       = trial.*repmat(ChanInfo[2,:],1,size(trial,2))
 
-    return EEG, DataInfo, ChanInfo
+    EEG = dataset(trial,ChanInfo[1,:],get(DataInfo,"SamplingRate",NaN));
+    # return EEG, DataInfo, ChanInfo
+    return EEG
 end
 
-function readHDR(filename)
+function readHDR(filename::String)
     filename      = string(filename,".vhdr")
     Fs            = NaN;
     dataFormat    = "";
@@ -55,7 +66,7 @@ function readHDR(filename)
     return DataInfo, ChanInfo
 end
 
-function getChanInfo(x)
+function getChanInfo(x::String)
     h         = search(x,'h');
     s         = search(x,'=');
     e         = search(x,',');
@@ -67,18 +78,21 @@ function getChanInfo(x)
     return info
 end
 
-function getGeneralInfo(x)
+function getGeneralInfo(x::String)
     s  = search(x,':');
     return x[s+2:end-2];
 end
 
-function getDataInfo(x)
+function getDataInfo(x::String)
     s  = search(x,'=');
     return x[s+1:end-2];
 end
 
-function getEncoding(x)
+function getEncoding(x::String)
     TypeEncode  = Dict("INT_16" => "Int16","UINT_16" => "UInt16","FLOAT_32" => "Float32");
     BitEncode    = Dict("INT_16" => 2,"UINT_16" => 2,"FLOAT_32" => 4);
     return TypeEncode[getDataInfo(x)], BitEncode[getDataInfo(x)];
+end
+
+
 end
