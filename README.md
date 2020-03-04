@@ -4,7 +4,7 @@ Loads raw brainvision data into Julia
 # Install
 
 ```
-Pkd.add("https://github.com/agricolab/brainvisionloader.jl")
+Pkg.add("https://github.com/agricolab/brainvisionloader.jl")
 ```
 
 The magic happens in
