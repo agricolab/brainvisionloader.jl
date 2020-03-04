@@ -26,8 +26,7 @@ function readEEG(filename::String,dataInfo,chanInfo)
 
 
     trial = collect(trial)
-    println(dump(trial))
-    println(size(chanInfo))
+
     trial = reshape(trial,size(chanInfo,2),:)
     trial = trial.*repeat(chanInfo[2,:],1,size(trial,2))
 
@@ -49,22 +48,22 @@ function readMRK(filename::String)
             end
             if contains(x,"; Commas in type or description text are coded")
 
-            if length(x)==0 || isnothing(x) || any(occursin("\r\n",x[1:2]))
-                doCollect = false;
-            end
-            if doCollect
-                markerInfo  = vcat(markerInfo,getMarkerSegment(x))
-            end
-            if occursin("; Commas in type or description text are coded",x)
-                # once we are here, start collecting the markers
+                if length(x)==0 || isnothing(x) || any(occursin("\r\n",x[1:2]))
+                    doCollect = false;
+                end
+                if doCollect
+                    markerInfo  = vcat(markerInfo,getMarkerSegment(x))
+                end
+                if occursin("; Commas in type or description text are coded",x)
+                    # once we are here, start collecting the markers
 
-                doCollect = true
+                    doCollect = true
+                end
             end
         end
-    end
 
-    return MarkerInfo
-end
+        return MarkerInfo
+    end
 
     return markerInfo
 end
@@ -85,12 +84,14 @@ function readHDR(filename::String)
     chanInfo      = [];
     dataInfo      = [];
 
+    println(filename)
+
     doCollect     = false;
     open(string(filename,".vhdr")) do f
         while !eof(f)
             x = readline(f)
 
-          # Read General Info
+            # Read General Info
 
             if contains(x,"Sampling Rate [Hz]:");
                 Fs = parse(Int32,getGeneralInfo(x));
@@ -117,46 +118,6 @@ function readHDR(filename::String)
     end
     DataInfo = Dict("SamplingRate"=>Fs,"ChannelNumber"=>NumChan,"Encoding"=>binaryFormat,"ByteLength"=>bitFormat,"Format"=>dataFormat,"Orientation"=>dataOrient)
     return DataInfo, ChanInfo
-end
-
-function getChanInfo(x::String)
-    h         = search(x,'h');
-    s         = search(x,'=');
-    e         = search(x,',');
-    v         = search(x,'V');
-    name      = x[s+1:e-1];
-    id        = parse(Int64,x[h+1:s-1]);
-    res       = parse(Float32,x[e+2:v-4]);
-    info      = [name;res;id]
-
-            if occursin("Sampling Rate [Hz]:",x);
-                Fs = parse(Int32,getGeneralInfo(x));
-            end
-            if occursin("Number of channels:",x);
-                NumChan = parse(Int32,getGeneralInfo(x));
-            end
-            if occursin("Dataformat",x)
-                dataformat = getdataInfo(x);
-            end
-            if occursin("Dataorientation",x)
-                dataOrient = getdataInfo(x);
-            end
-            if occursin("Binaryformat",x);
-                binaryformat,bitformat = getencoding(x)
-            end
-
-            # Read Channel-Specific Info
-
-            if length(x)==0 || isnothing(x) || any(occursin("\r\n",x[1:2]))
-                 doCollect = false;
-            end
-            if doCollect; chanInfo = hcat(chanInfo,getchanInfo(x)); end
-            if occursin("Ch1=",x); doCollect = true; chanInfo = getchanInfo(x); end
-
-        end
-    end
-    dataInfo = Dict("srate"=>Fs,"channelNumber"=>NumChan,"encoding"=>binaryformat,"byteLength"=>bitformat,"format"=>dataformat,"orientation"=>dataOrient)
-    return dataInfo, chanInfo
 end
 
 function getchanInfo(x::String)
@@ -187,6 +148,5 @@ function getencoding(x::String)
     return TypeEncode[getdataInfo(x)], BitEncode[getdataInfo(x)];
 
 end
-
 
 end

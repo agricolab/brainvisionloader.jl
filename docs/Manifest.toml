@@ -288,6 +288,11 @@ git-tree-sha1 = "fd36a6739e256527287c5444960d0266712cd49e"
 uuid = "83775a58-1f1d-513f-b197-d71354ab007a"
 version = "1.2.11+8"
 
+[[brainvisionloader]]
+path = "C:\\Users\\behinger\\.julia\\dev\\brainvisionloader"
+uuid = "72221ce5-8473-45ab-9239-08bffc96196d"
+version = "0.1.0"
+
 [[libass_jll]]
 deps = ["Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "Libdl", "Pkg", "Zlib_jll"]
 git-tree-sha1 = "3fd3ea3525f2e3d337c54a52b2ca78a5a272bbf5"

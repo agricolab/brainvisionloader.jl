@@ -1,8 +1,8 @@
 
 using Plots
-using ..brainvisionloader
+using brainvisionloader
 
-filename = "../data/example"
+filename = "data/example"
 EEG = brainvisionloader.loadFile(filename)
 
 toi     = EEG.markers[2,2]-EEG.srate:EEG.markers[2,2]+EEG.srate;
