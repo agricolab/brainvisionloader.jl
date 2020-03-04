@@ -83,42 +83,42 @@ function readHDR(filename::String)
     NumChan       = NaN;
     chanInfo      = [];
     dataInfo      = [];
-
-    println(filename)
-
     doCollect     = false;
     open(string(filename,".vhdr")) do f
         while !eof(f)
             x = readline(f)
 
-            # Read General Info
-
-            if contains(x,"Sampling Rate [Hz]:");
+          # Read General Info
+            if occursin("Sampling Rate [Hz]:",x);
                 Fs = parse(Int32,getGeneralInfo(x));
             end
-            if contains(x,"Number of channels:");
+            if occursin("Number of channels:",x);
                 NumChan = parse(Int32,getGeneralInfo(x));
             end
-            if contains(x,"DataFormat")
-                dataFormat = getDataInfo(x);
+            if occursin("Dataformat",x)
+                dataformat = getdataInfo(x);
             end
-            if contains(x,"DataOrientation")
-                dataOrient = getDataInfo(x);
+            if occursin("Dataorientation",x)
+                dataOrient = getdataInfo(x);
             end
-            if contains(x,"BinaryFormat");
-                binaryFormat,bitFormat = getEncoding(x)
+            if occursin("Binaryformat",x);
+                binaryformat,bitformat = getencoding(x)
             end
 
             # Read Channel-Specific Info
-            if contains(x[1:2],"\r\n"); doCollect = false; end
-            if doCollect; ChanInfo = hcat(ChanInfo,getChanInfo(x)); end
-            if contains(x,"Ch1="); doCollect = true; ChanInfo = getChanInfo(x); end
+
+            if length(x)==0 || isnothing(x) || any(occursin("\r\n",x[1:2]))
+                 doCollect = false;
+            end
+            if doCollect; chanInfo = hcat(chanInfo,getchanInfo(x)); end
+            if occursin("Ch1=",x); doCollect = true; chanInfo = getchanInfo(x); end
 
         end
     end
-    DataInfo = Dict("SamplingRate"=>Fs,"ChannelNumber"=>NumChan,"Encoding"=>binaryFormat,"ByteLength"=>bitFormat,"Format"=>dataFormat,"Orientation"=>dataOrient)
-    return DataInfo, ChanInfo
+    dataInfo = Dict("srate"=>Fs,"channelNumber"=>NumChan,"encoding"=>binaryformat,"byteLength"=>bitformat,"format"=>dataformat,"orientation"=>dataOrient)
+    return dataInfo, chanInfo
 end
+
 
 function getchanInfo(x::String)
 
