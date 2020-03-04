@@ -35,36 +35,23 @@ end
 
 function readMRK(filename::String)
     doCollect   = false
-
-    markerInfo  = hcat(Array{String},Array{String},Array{Int64},Array{Int64})
+    markerInfo  = Array{Any,2}(undef,0,4)
     open(string(filename,".vmrk")) do f
         while !eof(f)
             x = readline(f)
             # Read Channel-Specific Info
-
-            if contains(x[1:2],"\r\n"); doCollect = false; end
-            if doCollect
-                MarkerInfo  = vcat(MarkerInfo,getMarkerSegment(x))
+            if length(x)==0 || isnothing(x) || any(occursin("\r\n",x[1:2]))
+                doCollect = false;
             end
-            if contains(x,"; Commas in type or description text are coded")
-
-                if length(x)==0 || isnothing(x) || any(occursin("\r\n",x[1:2]))
-                    doCollect = false;
-                end
-                if doCollect
-                    markerInfo  = vcat(markerInfo,getMarkerSegment(x))
-                end
-                if occursin("; Commas in type or description text are coded",x)
-                    # once we are here, start collecting the markers
-
-                    doCollect = true
-                end
+            if doCollect
+                markerInfo  = vcat(markerInfo,getMarkerSegment(x))
+            end
+            if occursin("; Commas in type or description text are coded",x)
+                # once we are here, start collecting the markers
+                doCollect = true
             end
         end
-
-        return MarkerInfo
     end
-
     return markerInfo
 end
 
@@ -119,9 +106,8 @@ function readHDR(filename::String)
     return dataInfo, chanInfo
 end
 
-
 function getchanInfo(x::String)
-
+    #match(r"^Ch([0-9]+)=[A-Za-z0-9]+,[A-Za-z0-9]*,)
     id,other = split(x,"=")
 
     name,ref,res,unit  = split(other,",")
@@ -133,6 +119,7 @@ function getchanInfo(x::String)
 end
 
 function getGeneralInfo(x::String)
+
     return split(x,':')[2];
 
 end
@@ -146,7 +133,7 @@ function getencoding(x::String)
     TypeEncode  = Dict("INT_16" => "Int16","UINT_16" => "UInt16","FLOAT_32" => "Float32");
     BitEncode    = Dict("INT_16" => 2,"UINT_16" => 2,"FLOAT_32" => 4);
     return TypeEncode[getdataInfo(x)], BitEncode[getdataInfo(x)];
-
 end
+
 
 end

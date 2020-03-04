@@ -1,13 +1,14 @@
 
 using Plots
+plotly()
 using brainvisionloader
 
-filename = "data/example"
+filename = "../data/example"
 EEG = brainvisionloader.loadFile(filename)
 
-toi     = EEG.markers[2,2]-EEG.srate:EEG.markers[2,2]+EEG.srate;
-y       = EEG.data[25,toi]
-x       = [1:length(y)]-EEG.srate
+toi     = range(EEG.markers[2,3]-EEG.srate,stop=EEG.markers[2,3]+EEG.srate);
+y       = EEG.data[25,Int64.(toi)]
+x       = collect(1:length(y)) .-EEG.srate
 xtick   = -EEG.srate:(EEG.srate/4):EEG.srate
 
 plot(x, y,
