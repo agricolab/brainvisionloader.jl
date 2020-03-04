@@ -1,7 +1,7 @@
 name = "brainvisionloader"
 uuid = "72221ce5-8473-45ab-9239-08bffc96196d"
-authors = ["Benedikt Ehinger <behinger@uos.de>"]
-version = "0.1.0"
+authors = ["Robert Guggenberger","Benedikt Ehinger <eeg@benediktehinger.de>"]
+version = "0.2.0"
 
 [compat]
 julia = "1"
