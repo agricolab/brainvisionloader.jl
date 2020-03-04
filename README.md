@@ -9,14 +9,14 @@ Check out script.jl to see how to read & plot the exemplary dataset
 
 ```julia
 using Plots
-plotlyjs()
-include("readBrainVision.jl")
+
+using brainvisionloader
 
 filename = "./data/example"
-EEG = NI.loadFile(filename)
+EEG = brainvisionloader.loadFile(filename)
 
 ## --------
-toi     = EEG.Markers[2,2]-EEG.SamplingRate:EEG.Markers[2,2]+EEG.SamplingRate;
+toi     = EEG.Markers[2,2]-EE:G.SamplingRate:EEG.Markers[2,2]+EEG.SamplingRate;
 y       = EEG.data[25,toi]
 x       = [1:length(y)]-EEG.SamplingRate
 xtick   = -EEG.SamplingRate:(EEG.SamplingRate/4):EEG.SamplingRate
@@ -32,7 +32,7 @@ plot(x, y,
     xticks = xtick,
     );
 gui()
-savefig("./data/example.png")
+savefig("./docs/example.png")
 ```
 
-<img src = "./data/example.png">
+<img src = "./docs/example.png">
